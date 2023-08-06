@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { CarProps } from '@/types'
-import { CustomButton } from '.'
+import { CustomButton, CarDetail } from '.'
 import { calculateCarRent } from '@/utils'
 
 interface CarCardProps {
@@ -11,8 +11,13 @@ interface CarCardProps {
 }
 
 const CarCard = ({car} :CarCardProps) => {
+
+  const [isOpen, setisOpen] = useState(false)
   const { city_mpg, year, make, model, transmission, drive} = car
   const carRent = calculateCarRent(city_mpg,year)
+
+
+
   return (
     <div className='car-card group '>
 
@@ -42,6 +47,8 @@ const CarCard = ({car} :CarCardProps) => {
       </div>
 
       <div className='relative flex w-full mt-2'>
+
+        {/* icons */}
         <div className='flex group-hover:invisible w-full justify-between text-grey '>
 
           <div className='car-card__icon'>
@@ -66,8 +73,19 @@ const CarCard = ({car} :CarCardProps) => {
           </div>
 
         </div>
-      </div>
 
+        <div className='car-card__btn-container'>
+            <CustomButton
+              title='View More'
+              containerStyles='w-full py-[16px] rounded-full bg-primary-blue'
+              textStyles='text-white text-[14px] leading-[17px] font-bold'
+              rightIcon = '/right-arrow.svg'
+              handleClick={() => setisOpen(true)}
+            />
+        </div>
+
+      </div>
+      <CarDetail isOpen={isOpen} closeModel={() => setisOpen(false)} car={car} />
     </div>
   )
 
