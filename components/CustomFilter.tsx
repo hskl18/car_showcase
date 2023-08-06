@@ -1,9 +1,9 @@
-import { CustomFilterProps } from '@/types'
 import React from 'react'
 
 const CustomFilter = ({title}:CustomFilterProps) => {
   return (
     <div>{title}</div>
+    // 2.34.06
   )
 }
 

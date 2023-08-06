@@ -1,11 +1,19 @@
-export async function fetchCars(){
+import { CarProps, FilterProps } from "@/types";
+
+export async function fetchCars(filters: FilterProps){
+    const { manufacturer, year, model, limit, fuel } = filters;
+
     const headers = {
 		'X-RapidAPI-Key': 'cf90eed0ddmshcd594f467752dc7p19a393jsnb32d85182f72',
 		'X-RapidAPI-Host': 'cars-by-api-ninjas.p.rapidapi.com'
 	}
 
-    const response = await fetch ('https://cars-by-api-ninjas.p.rapidapi.com/v1/cars?model=carr',
-    {headers: headers});
+  const response = await fetch(
+    `https://cars-by-api-ninjas.p.rapidapi.com/v1/cars?make=${manufacturer}&year=${year}&model=${model}&limit=${limit}&fuel_type=${fuel}`,
+    {
+      headers: headers,
+    }
+  );
 
     const result = await response.json();
 
@@ -26,3 +34,21 @@ export const calculateCarRent = (city_mpg: number, year: number) => {
 
   return rentalRatePerDay.toFixed(0);
 };
+
+export const generateCarImageUrl = (car: CarProps, angle?: string) => {
+  const url = new URL("https://cdn.imagin.studio/getimage");
+  const { make, model, year } = car;
+
+  // url.searchParams.append('customer', process.env.NEXT_PUBLIC_IMAGIN_API_KEY || '');
+  //do not having my own api key, so i borrow from https://www.youtube.com/watch?v=pUNSHPyVryU&t=4605s
+
+  url.searchParams.append('customer', 'hrjavascript-mastery');
+  url.searchParams.append('make', make);
+  url.searchParams.append('modelFamily', model.split(" ")[0]);
+  url.searchParams.append('zoomType', 'fullscreen');
+  url.searchParams.append('modelYear', `${year}`);
+  // url.searchParams.append('zoomLevel', zoomLevel);
+  url.searchParams.append('angle', `${angle}`);
+
+  return `${url}`;
+} 
